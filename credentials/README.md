@@ -7,7 +7,7 @@ File: `algorithmia.json`
 ```
 
 {
-    "apiKey": "simP93ZQ8VVqimVrs+8ZxjuvO3L1"
+    "apiKey": "sim##########################"
 }
 
 
