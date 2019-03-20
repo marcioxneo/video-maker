@@ -24,4 +24,5 @@ File: `watson-nlu.json`
   "iam_serviceid_crn": "crn:v1:bluemix:public:iam-identity::a/dd30a45130ad4eb1bcc8f02504c0c75d::serviceid:ServiceId-3b298cc1-187e-4717-be28-ca4bd4d70faf",
   "url": "https://gateway.watsonplatform.net/natural-language-understanding/api"
 }
+
 ```
