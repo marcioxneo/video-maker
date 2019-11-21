@@ -31,10 +31,14 @@ async function robot(){
         //return 'RESULTADO DA PROMISE'
         const algorithmiaAuthenticated = algorithmia(algorithmiaApiKey)
         const wikipediaAlgorithm = algorithmiaAuthenticated.algo('web/WikipediaParser/0.1.2')
-        const wikipediaResponde = await wikipediaAlgorithm.pipe(content.searchTerm)
+        //const wikipediaResponde = await wikipediaAlgorithm.pipe(content.searchTerm)
+        const wikipediaResponse = await wikipediaAlgorithm.pipe({
+            "lang" : content.lang,
+            "articleName" : content.searchTerm
+        })
         //console.log('Fazendo log do objeto "wikipediaResponde"')
         //console.log(wikipediaResponde)
-        const wikipediaContent = wikipediaResponde.get()
+        const wikipediaContent = wikipediaResponse.get()
         //console.log(wikipediaContent)
 
         content.sourceContentOriginal = wikipediaContent.content
