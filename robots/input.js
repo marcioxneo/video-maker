@@ -1,15 +1,26 @@
 const readline = require('readline-sync')
 const state = require('./state.js')
+const log = require('./log.js')
+const date = require('./date.js')
 
 function robot() {
     const content = {
         maximumSentences: 7
     }
 
+    const dados = {}
+    log.load(dados)
+
     content.lang = askAndReturnLanguage()
     content.searchTerm = askAndReturnSearchTerm()
     content.prefix = askAndReturnPrefix()
     state.save(content)
+
+    // LOG
+    dados.dateTime = date.actualDate()
+    dados.robot = ' * [Input Robot] * '
+    //log.desc = getDescriptionLog()
+    
 
     function askAndReturnLanguage() {
         const language = ['pt', 'en']
@@ -40,6 +51,11 @@ function robot() {
         }
         
     }
+
+    dados.task = {language: `${content.lang}`,searchTerm: `${content.searchTerm}`, prefix: `${content.prefix}`}
+    log.save(dados)
+
+    
 }
 
 module.exports = robot

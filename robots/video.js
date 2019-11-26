@@ -1,9 +1,11 @@
 const gm = require('gm').subClass({imageMagick: true})
-
+const hbjs = require('handbrake-js')
+const fs = require('fs')
 const state = require('./state.js')
-//const path = require('path')
+const spawn = require('child_process').spawn
+const path = require('path')
 //const os = require('os')
-//const rootPath = path.resolve(__dirname, '..')
+const rootPath = path.resolve(__dirname, '..')
 
 //const fromRoot = relPath => path.resolve(rootPath, relPath)
 
@@ -11,9 +13,11 @@ const state = require('./state.js')
 async function robot() {
     const content = state.load()
 
-    await convertAllImages(content)
-    await createAllSentenceImages(content)
-    await createYouTubeThumbnail()
+    //await convertAllImages(content)
+    //await createAllSentenceImages(content)
+    //await createYouTubeThumbnail()
+    //await createAfterEfffectScript(content)
+    await renderVideoWithAfterEffects()
 
     async function convertAllImages(content) {
         for (let sentenceIndex = 0; sentenceIndex < content.sentences.length; sentenceIndex++) {
@@ -132,6 +136,55 @@ async function robot() {
                     resolve()
 
                 })
+        })
+    }
+
+    async function createAfterEfffectScript(content) {
+        await state.saveScript(content)
+    }
+
+    async function renderVideoWithAfterEffects() {
+        return new Promise((resolve, reject) => {
+            const aerenderFilePath = 'C:/Program Files/Adobe/Adobe After Effects CC 2019/Support Files/aerender.exe'
+            const templateFilePath = `${rootPath}/templates/1/template.aep`
+            const destinationFilePath = `${rootPath}/content/output.mov`
+            const destinationFilePathConverted = `${rootPath}/content/output.mp4`
+
+            console.log('>[video-robot] Starting After Effects')
+
+            const aerender = spawn(aerenderFilePath, [
+                '-comp', 'main',
+                '-project', templateFilePath,
+                '-output', destinationFilePath
+            ])
+
+            aerender.stdout.on('data', (data) => {
+                process.stdout.write(data)
+            })
+
+            aerender.on('close', () => {
+                console.log('>[video-robot] After Effects closed')
+                hbjs
+                    .spawn({
+                        input: destinationFilePath,
+                        output: destinationFilePathConverted    
+                    })
+                    .on('error', err => {
+                        //invalid user input, no video found etc
+                        console.error(`> [video-robot] Error found while trying to convert video: ${err}`)
+                    })
+                    .on('complete', progress => {
+                        console.log('> [video-robot] Encoding finished successfully')
+                        // remove big mov file
+                        fs.unlinkSync(destinationFilePath, err => {
+                            if(err) {
+                                console.log(`> [video-robot] Error romoving .mov file: ${err}`)
+                            }
+                            console.log('> [video-robot] output .MOV removed')
+                        })
+                        resolve()
+                    })
+            })
         })
     }
 }
