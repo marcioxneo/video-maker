@@ -67,3 +67,9 @@ content.json
 
 content/*.png
 content/*.jpg
+content/*.mp4
+content/*.js
+
+# Adobe After Effects
+templates/1/*.*
+templates/2/*.*

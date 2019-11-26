@@ -3,7 +3,8 @@ const robots = {
     text: require('./robots/text.js'),
     state: require('./robots/state.js'),
     image: require('./robots/image.js'),
-    video: require('./robots/video.js')
+    video: require('./robots/video.js'),
+    log: require('./robots/log.js')
 }
 
 async function start() {
@@ -15,6 +16,9 @@ async function start() {
 
     //const content = robots.state.load()
     //console.dir(content, { depth: null})
+
+    // const log = robots.log.load()
+    // console.dir(log, { depth: null })
 }
 
 start()

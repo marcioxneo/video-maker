@@ -20,6 +20,7 @@
     "algorithmia": "^0.3.10",
     "gm": "^1.23.1",
     "googleapis": "^39.1.0",
+    "handbrake-js": "^4.0.3",
     "image-downloader": "^3.4.2",
     "readline-sync": "^1.4.9",
     "sbd": "^1.0.14",
